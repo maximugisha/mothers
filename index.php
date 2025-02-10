@@ -6,14 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mothers Union Dashboard</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body class="bg-gray-100">
     <div id="toast-container" class="fixed top-4 right-4 z-50"></div>
 
     <div class="container mx-auto px-4 py-8">
-        <h1 class="text-3xl font-bold mb-8">Mothers Union Management Dashboard</h1>
+        <h1 class="text-3xl font-bold mb-8">Mothers Members</h1>
         <div class="mb-8">
             <button id="addMemberBtn" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
                 <span class="text-xl">+</span> Add New Member
@@ -130,7 +130,7 @@
 
         // Load members
         function loadMembers() {
-            fetch('../api/read.php')
+            fetch('api/read.php')
                 .then(response => response.json())
                 .then(data => {
                     const membersList = document.getElementById('membersList');
@@ -156,7 +156,7 @@
 
         // Edit member
         function editMember(id) {
-            fetch(`../api/read_one.php?id=${id}`)
+            fetch(`api/read_one.php?id=${id}`)
                 .then(response => response.json())
                 .then(data => {
                     document.getElementById('memberId').value = data.id;
@@ -178,7 +178,7 @@
         // Delete member
         function deleteMember(id) {
             if (confirm('Are you sure you want to delete this member?')) {
-                fetch('../api/delete.php', {
+                fetch('api/delete.php', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -225,7 +225,7 @@
             const data = {};
             formData.forEach((value, key) => data[key] = value);
 
-            const url = isEditing ? '../api/update.php' : '../api/create.php';
+            const url = isEditing ? 'api/update.php' : 'api/create.php';
 
             fetch(url, {
                 method: 'POST',
