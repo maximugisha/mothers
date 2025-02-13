@@ -1,45 +1,68 @@
-CREATE TABLE dioceses (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(100) NOT NULL
-);
-
-CREATE TABLE archdeaconries (
-    id INT PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE dioceses
+(
+    id   INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(100) NOT NULL,
-    diocese_id INT NOT NULL,
-    FOREIGN KEY (diocese_id) REFERENCES dioceses(id)
+    code VARCHAR(3) NOT NULL UNIQUE
 );
 
-CREATE TABLE parishes (
-    id INT PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE archdeaconries
+(
+    id         INT PRIMARY KEY AUTO_INCREMENT,
+    name       VARCHAR(100) NOT NULL,
+    diocese_id INT          NOT NULL,
+    FOREIGN KEY (diocese_id) REFERENCES dioceses (id)
+);
+
+CREATE TABLE parishes
+(
+    id              INT PRIMARY KEY AUTO_INCREMENT,
+    name            VARCHAR(100) NOT NULL,
+    archdeaconry_id INT          NOT NULL,
+    FOREIGN KEY (archdeaconry_id) REFERENCES archdeaconries (id)
+);
+
+CREATE TABLE churches
+(
+    id        INT PRIMARY KEY AUTO_INCREMENT,
+    name      VARCHAR(100) NOT NULL,
+    parish_id INT          NOT NULL,
+    FOREIGN KEY (parish_id) REFERENCES parishes (id)
+);
+
+CREATE TABLE cgroups
+(
+    id   INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(100) NOT NULL,
-    archdeaconry_id INT NOT NULL,
-    FOREIGN KEY (archdeaconry_id) REFERENCES archdeaconries(id)
+    code VARCHAR(3) NOT NULL UNIQUE
 );
 
-CREATE TABLE churches (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(100) NOT NULL,
-    parish_id INT NOT NULL,
-    FOREIGN KEY (parish_id) REFERENCES parishes(id)
+CREATE TABLE users
+(
+    id         INT PRIMARY KEY AUTO_INCREMENT,
+    email      VARCHAR(100)                       NOT NULL UNIQUE,
+    password   VARCHAR(255)                       NOT NULL,
+    firstname  VARCHAR(255)                       NOT NULL,
+    lastname   VARCHAR(255)                       NOT NULL,
+    role       ENUM ('admin', 'editor', 'viewer') NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE cgroups (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(100) NOT NULL
+CREATE TABLE members
+(
+    id             INT PRIMARY KEY AUTO_INCREMENT,
+    first_name     VARCHAR(50)  NOT NULL,
+    last_name      VARCHAR(50)  NOT NULL,
+    email          VARCHAR(100) NOT NULL UNIQUE,
+    phone          VARCHAR(20),
+    address        TEXT,
+    join_date      DATETIME     NOT NULL,
+    status         ENUM ('paid', 'unpaid') DEFAULT 'unpaid',
+    created_at     TIMESTAMP               DEFAULT CURRENT_TIMESTAMP,
+    church_id      INT,
+    cgroup_id       INT,
+    next_of_kin    VARCHAR(100),
+    member_number  VARCHAR(50),
+    number_of_kids INT,
+    FOREIGN KEY (church_id) REFERENCES churches (id),
+    FOREIGN KEY (cgroup_id) REFERENCES cgroups (id)
 );
-
-ALTER TABLE members
-ADD COLUMN church_id INT,
-ADD COLUMN group_id INT,
-ADD COLUMN next_of_kin VARCHAR(100),
-ADD COLUMN member_number VARCHAR(50),
-ADD COLUMN number_of_kids INT,
-ADD FOREIGN KEY (church_id) REFERENCES churches(id),
-ADD FOREIGN KEY (cgroup_id) REFERENCES cgroups(id);
-
-ALTER TABLE cgroups
-    ADD COLUMN code VARCHAR(100) NOT NULL UNIQUE;
-
-ALTER TABLE dioceses
-    ADD COLUMN code VARCHAR(100) NOT NULL UNIQUE;

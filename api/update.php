@@ -26,7 +26,7 @@ if (
     $member->email = $data->email;
     $member->phone = $data->phone;
     $member->address = $data->address;
-    $member->status = isset($data->status) ? $data->status : 'active';
+    $member->status = isset($data->status) ? $data->status : 'unpaid';
     $member->church_id = $data->church_id;
     $member->cgroup_id = $data->cgroup_id;
     $member->next_of_kin = $data->next_of_kin;
