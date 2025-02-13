@@ -9,7 +9,6 @@ $database = new Database();
 $db = $database->getConnection();
 $member = new Member($db);
 
-// Get page and limit from query parameters
 $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
 $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 5;
 $offset = ($page - 1) * $limit;
@@ -38,7 +37,12 @@ if ($num > 0) {
             "phone" => $phone,
             "address" => $address,
             "join_date" => $join_date,
-            "status" => $status
+            "status" => $status,
+            "church" => $church_name,
+            "group" => $group_name,
+            "next_of_kin" => $next_of_kin,
+            "member_number" => $member_number,
+            "number_of_kids" => $number_of_kids,
         );
         array_push($members_arr["records"], $member_item);
     }

@@ -6,6 +6,6 @@ CREATE TABLE members (
     phone VARCHAR(20),
     address TEXT,
     join_date DATETIME NOT NULL,
-    status ENUM('active', 'inactive') DEFAULT 'active',
+    status ENUM('paid', 'unpaid') DEFAULT 'unpaid',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

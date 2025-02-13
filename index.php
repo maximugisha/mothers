@@ -26,8 +26,9 @@ ob_start();
                     <th class="px-4 py-2 text-left">Name</th>
                     <th class="px-4 py-2 text-left">Email</th>
                     <th class="px-4 py-2 text-left">Phone</th>
-                    <th class="px-4 py-2 text-left">Join Date</th>
-                    <!--                    <th class="px-4 py-2 text-left">Actions</th>-->
+                    <th class="px-4 py-2 text-left">Church</th>
+                    <th class="px-4 py-2 text-left">Group</th>
+                    <th class="px-4 py-2 text-left">ID</th>
                 </tr>
                 </thead>
                 <tbody id="membersList">
@@ -65,7 +66,9 @@ ob_start();
                             <td class="px-4 py-2">${member.first_name} ${member.last_name}</td>
                             <td class="px-4 py-2">${member.email}</td>
                             <td class="px-4 py-2">${member.phone}</td>
-                            <td class="px-4 py-2">${member.join_date}</td>
+                            <td class="px-4 py-2">${member.church}</td>
+                            <td class="px-4 py-2">${member.group}</td>
+                            <td class="px-4 py-2">${member.member_number}</td>
 
                         </tr>
                     `;

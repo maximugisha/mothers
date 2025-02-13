@@ -27,6 +27,11 @@ if (
     $member->phone = $data->phone;
     $member->address = $data->address;
     $member->status = isset($data->status) ? $data->status : 'active';
+    $member->church_id = $data->church_id;
+    $member->cgroup_id = $data->cgroup_id;
+    $member->member_number = $data->member_number;
+    $member->number_of_kids = $data->number_of_kids;
+
 
     if ($member->update()) {
         http_response_code(200);

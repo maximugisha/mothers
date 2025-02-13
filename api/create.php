@@ -25,6 +25,10 @@ if (
     $member->email = $data->email;
     $member->phone = $data->phone;
     $member->address = $data->address;
+    $member->church_id = $data->church_id;
+    $member->cgroup_id = $data->cgroup_id;
+    $member->member_number = $data->member_number;
+    $member->number_of_kids = $data->number_of_kids;
     $member->join_date = date('Y-m-d H:i:s');
     $member->status = isset($data->status) ? $data->status : 'active'; // Set default value if not provided
 
