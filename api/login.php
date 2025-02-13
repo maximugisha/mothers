@@ -28,7 +28,6 @@ if (!empty($data->email) && !empty($data->password)) {
                 "exp" => time() + JWT_EXPIRATION_TIME,
                 "data" => array(
                     "id" => $user->id,
-                    "username" => $user->username,
                     "email" => $user->email,
                     "role" => $user->role
                 )
@@ -42,7 +41,9 @@ if (!empty($data->email) && !empty($data->password)) {
                 "jwt" => $jwt,
                 "user" => array(
                     "id" => $user->id,
-                    "username" => $user->username,
+                    "email" => $user->email,
+                    "lastname" => $user->lastname,
+                    "firstname" => $user->firstname,
                     "role" => $user->role
                 )
             ));

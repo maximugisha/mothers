@@ -12,10 +12,6 @@
         <h1 class="text-2xl font-bold mb-6 text-center">Register</h1>
         <form id="registerForm" class="space-y-4">
             <div>
-                <label class="block text-sm font-medium mb-1">Username</label>
-                <input type="text" name="username" required class="w-full p-2 border rounded">
-            </div>
-            <div>
                 <label class="block text-sm font-medium mb-1">First Name</label>
                 <input type="text" name="firstname" required class="w-full p-2 border rounded">
             </div>

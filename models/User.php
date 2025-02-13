@@ -6,7 +6,6 @@ class User {
     private $table_name = "users";
 
     public $id;
-    public $username;
     public $email;
     public $password;
     public $role;
@@ -19,7 +18,6 @@ class User {
     public function create() {
         $query = "INSERT INTO " . $this->table_name . "
                 SET
-                    username = :username,
                     email = :email,
                     firstname = :firstname,
                     lastname = :lastname,
@@ -29,7 +27,6 @@ class User {
 
         $stmt = $this->conn->prepare($query);
 
-        $this->username = htmlspecialchars(strip_tags($this->username));
         $this->firstname = htmlspecialchars(strip_tags($this->firstname));
         $this->lastname = htmlspecialchars(strip_tags($this->lastname));
         $this->email = htmlspecialchars(strip_tags($this->email));
@@ -37,7 +34,6 @@ class User {
         $this->role = htmlspecialchars(strip_tags($this->role));
         $this->created_at = date('Y-m-d H:i:s');
 
-        $stmt->bindParam(":username", $this->username);
         $stmt->bindParam(":email", $this->email);
         $stmt->bindParam(":firstname", $this->firstname);
         $stmt->bindParam(":lastname", $this->lastname);
@@ -49,7 +45,7 @@ class User {
     }
 
     public function emailExists() {
-        $query = "SELECT id, username, firstname, lastname, password, role
+        $query = "SELECT id, firstname, lastname, password, role
                 FROM " . $this->table_name . "
                 WHERE email = ?
                 LIMIT 0,1";
@@ -61,7 +57,6 @@ class User {
         if($stmt->rowCount() > 0) {
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
             $this->id = $row['id'];
-            $this->username = $row['username'];
             $this->password = $row['password'];
             $this->firstname = $row['firstname'];
             $this->lastname = $row['lastname'];

@@ -15,14 +15,12 @@ $user = new User($db);
 $data = json_decode(file_get_contents("php://input"));
 
 if(
-    !empty($data->username) &&
     !empty($data->email) &&
     !empty($data->firstname) &&
     !empty($data->lastname) &&
     !empty($data->password) &&
     !empty($data->role)
 ) {
-    $user->username = $data->username;
     $user->email = $data->email;
     $user->password = $data->password;
     $user->firstname = $data->firstname;
