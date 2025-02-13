@@ -1,5 +1,7 @@
 <?php
-class User {
+
+class User
+{
     public $lastname;
     public $firstname;
     private $conn;
@@ -11,19 +13,21 @@ class User {
     public $role;
     public $created_at;
 
-    public function __construct($db) {
+    public function __construct($db)
+    {
         $this->conn = $db;
     }
 
-    public function create() {
+    public function create()
+    {
         $query = "INSERT INTO " . $this->table_name . "
-                SET
-                    email = :email,
-                    firstname = :firstname,
-                    lastname = :lastname,
-                    password = :password,
-                    role = :role,
-                    created_at = :created_at";
+                    SET
+                        email = :email,
+                        firstname = :firstname,
+                        lastname = :lastname,
+                        password = :password,
+                        role = :role,
+                        created_at = :created_at";
 
         $stmt = $this->conn->prepare($query);
 
@@ -44,17 +48,18 @@ class User {
         return $stmt->execute();
     }
 
-    public function emailExists() {
+    public function emailExists()
+    {
         $query = "SELECT id, firstname, lastname, password, role
-                FROM " . $this->table_name . "
-                WHERE email = ?
-                LIMIT 0,1";
+                    FROM " . $this->table_name . "
+                    WHERE email = ?
+                    LIMIT 0,1";
 
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(1, $this->email);
         $stmt->execute();
 
-        if($stmt->rowCount() > 0) {
+        if ($stmt->rowCount() > 0) {
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
             $this->id = $row['id'];
             $this->password = $row['password'];
@@ -65,4 +70,26 @@ class User {
         }
         return false;
     }
+
+    public function read()
+    {
+        $query = "SELECT * FROM " . $this->table_name;
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt;
+    }
+
+    public function updateRole() {
+        $query = "UPDATE " . $this->table_name . " SET role = :role WHERE id = :id";
+        $stmt = $this->conn->prepare($query);
+
+        $this->role = htmlspecialchars(strip_tags($this->role));
+        $this->id = htmlspecialchars(strip_tags($this->id));
+
+        $stmt->bindParam(':role', $this->role);
+        $stmt->bindParam(':id', $this->id);
+
+        return $stmt->execute();
+    }
+
 }
