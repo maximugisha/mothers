@@ -24,7 +24,13 @@ if ($member->first_name != null) {
         "email" => $member->email,
         "phone" => $member->phone,
         "address" => $member->address,
-        "status" => $member->status
+        "status" => $member->status,
+        "church_id" => $member->church_id,
+        "cgroup_id" => $member->cgroup_id,
+        "next_of_kin" => $member->next_of_kin,
+        "member_number" => $member->member_number,
+        "number_of_kids" => $member->number_of_kids
+
     );
 
     http_response_code(200);

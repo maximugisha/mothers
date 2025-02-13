@@ -137,13 +137,11 @@ class Member
                         email = :email,
                         phone = :phone,
                         address = :address,
-                        status = :status
-                        church_id=:church_id,
-                        cgroup_id=:cgroup_id,
-                        next_of_kin=:next_of_kin,
-                        member_number=:member_number,
-                        number_of_kids=:number_of_kids
-                        
+                        status = :status,
+                        church_id = :church_id,
+                        cgroup_id = :cgroup_id,
+                        next_of_kin = :next_of_kin,
+                        number_of_kids = :number_of_kids
                     WHERE
                         id = :id";
 
@@ -155,14 +153,18 @@ class Member
         $stmt->bindParam(":phone", $this->phone);
         $stmt->bindParam(":address", $this->address);
         $stmt->bindParam(":status", $this->status);
-        $stmt->bindParam(":id", $this->id);
         $stmt->bindParam(":church_id", $this->church_id);
         $stmt->bindParam(":cgroup_id", $this->cgroup_id);
         $stmt->bindParam(":next_of_kin", $this->next_of_kin);
-        $stmt->bindParam(":member_number", $this->member_number);
         $stmt->bindParam(":number_of_kids", $this->number_of_kids);
+        $stmt->bindParam(":id", $this->id);
 
-        return $stmt->execute();
+        if ($stmt->execute()) {
+            $this->readOne();
+            return true;
+        }
+
+        return false;
     }
 
     public function delete()

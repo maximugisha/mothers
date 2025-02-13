@@ -29,13 +29,28 @@ if (
     $member->status = isset($data->status) ? $data->status : 'active';
     $member->church_id = $data->church_id;
     $member->cgroup_id = $data->cgroup_id;
-    $member->member_number = $data->member_number;
+    $member->next_of_kin = $data->next_of_kin;
     $member->number_of_kids = $data->number_of_kids;
-
 
     if ($member->update()) {
         http_response_code(200);
-        echo json_encode(array("message" => "Member was updated."));
+        echo json_encode(array(
+            "message" => "Member was updated.",
+            "member" => array(
+                "id" => $member->id,
+                "first_name" => $member->first_name,
+                "last_name" => $member->last_name,
+                "email" => $member->email,
+                "phone" => $member->phone,
+                "address" => $member->address,
+                "status" => $member->status,
+                "church_id" => $member->church_id,
+                "cgroup_id" => $member->cgroup_id,
+                "next_of_kin" => $member->next_of_kin,
+                "member_number" => $member->member_number,
+                "number_of_kids" => $member->number_of_kids
+            )
+        ));
     } else {
         http_response_code(503);
         echo json_encode(array("message" => "Unable to update member."));
@@ -44,3 +59,4 @@ if (
     http_response_code(400);
     echo json_encode(array("message" => "Unable to update member. Data is incomplete."));
 }
+?>
