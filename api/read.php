@@ -8,11 +8,24 @@ include_once '../models/Member.php';
 $database = new Database();
 $db = $database->getConnection();
 $member = new Member($db);
-$stmt = $member->read();
+
+// Get page and limit from query parameters
+$page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+$limit = isset($_GET['limit']) ? intval($_GET['limit']) : 5;
+$offset = ($page - 1) * $limit;
+
+$stmt = $member->readPaginated($limit, $offset);
 $num = $stmt->rowCount();
 
-if($num > 0) {
+if ($num > 0) {
     $members_arr = array();
+
+    $members_arr["pagination"] = array(
+        "current_page" => $page,
+        "per_page" => $limit,
+        "total_records" => $member->count(),
+        "total_pages" => ceil($member->count() / $limit)
+    );
     $members_arr["records"] = array();
 
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {

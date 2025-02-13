@@ -28,11 +28,12 @@ if (!isset($_SESSION['user'])) {
             <a href="#" class="text-gray-700 hover:text-gray-900">Contact</a>
         </nav>
         <div class="relative">
-            <img src="path/to/user-picture.jpg" alt="User Picture" class="w-10 h-10 rounded-full cursor-pointer"
-                 id="userMenuButton">
+            <img src="<?php echo !empty($_SESSION['user']['image']) ? $_SESSION['user']['image'] : 'npp.png'; ?>"
+                 class="w-10 h-10 rounded-full cursor-pointer" id="userMenuButton" alt="<?php echo $_SESSION['user']['firstname']; ?>">
             <div id="userMenu" class="absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow-lg hidden">
                 <div class="p-4 border-b">
-                    <p class="font-semibold"><?php echo $_SESSION['user']['name']; ?></p>
+                    <p class="font-semibold"><?php echo $_SESSION['user']['firstname'] . ' ' . $_SESSION['user']['lastname']; ?></p>
+                    <p class="text-sm text-gray-600"><?php echo $_SESSION['user']['email']; ?></p>
                 </div>
                 <ul>
                     <li><a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Profile</a></li>
@@ -48,7 +49,7 @@ if (!isset($_SESSION['user'])) {
 <!-- Main Content -->
 <div id="toast-container" class="fixed top-4 right-4 z-50"></div>
 <div class="container mx-auto px-4 py-8">
-    <h1 class="text-3xl font-bold mb-8">Mothers Members</h1>
+    <h1 class="text-3xl font-bold mb-8">Members</h1>
     <div class="mb-8">
         <button id="addMemberBtn" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
             <span class="text-xl">+</span> Add New Member
@@ -126,6 +127,11 @@ if (!isset($_SESSION['user'])) {
                 </tbody>
             </table>
         </div>
+        <div class="mt-4 flex justify-between items-center">
+            <button id="prevPageBtn" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Previous</button>
+            <span id="paginationInfo" class="text-gray-700"></span>
+            <button id="nextPageBtn" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Next</button>
+        </div>
     </div>
 </div>
 
@@ -170,8 +176,11 @@ if (!isset($_SESSION['user'])) {
     }
 
     // Load members
-    function loadMembers() {
-        fetch('api/read.php')
+    let currentPage = 1;
+    const limit = 5;
+
+    function loadMembers(page = 1) {
+        fetch(`api/read.php?page=${page}&limit=${limit}`)
             .then(response => response.json())
             .then(data => {
                 const membersList = document.getElementById('membersList');
@@ -179,21 +188,39 @@ if (!isset($_SESSION['user'])) {
 
                 data.records.forEach(member => {
                     membersList.innerHTML += `
-                                        <tr>
-                                            <td class="px-4 py-2">${member.first_name} ${member.last_name}</td>
-                                            <td class="px-4 py-2">${member.email}</td>
-                                            <td class="px-4 py-2">${member.phone}</td>
-                                            <td class="px-4 py-2">${member.join_date}</td>
-                                            <td class="px-4 py-2">
-                                                <button onclick="editMember(${member.id})" class="text-blue-500 hover:text-blue-700 mr-2">Edit</button>
-                                                <button onclick="deleteMember(${member.id})" class="text-red-500 hover:text-red-700">Delete</button>
-                                            </td>
-                                        </tr>
-                                    `;
+                        <tr>
+                            <td class="px-4 py-2">${member.first_name} ${member.last_name}</td>
+                            <td class="px-4 py-2">${member.email}</td>
+                            <td class="px-4 py-2">${member.phone}</td>
+                            <td class="px-4 py-2">${member.join_date}</td>
+                            <td class="px-4 py-2">
+                                <button onclick="editMember(${member.id})" class="text-blue-500 hover:text-blue-700 mr-2">Edit</button>
+                                <button onclick="deleteMember(${member.id})" class="text-red-500 hover:text-red-700">Delete</button>
+                            </td>
+                        </tr>
+                    `;
                 });
+
+                document.getElementById('paginationInfo').textContent = `Page ${data.pagination.current_page} of ${data.pagination.total_pages}`;
+                document.getElementById('prevPageBtn').disabled = data.pagination.current_page === 1;
+                document.getElementById('nextPageBtn').disabled = data.pagination.current_page === data.pagination.total_pages;
             })
             .catch(error => console.error('Error:', error));
     }
+
+    document.getElementById('prevPageBtn').addEventListener('click', () => {
+        if (currentPage > 1) {
+            currentPage--;
+            loadMembers(currentPage);
+        }
+    });
+
+    document.getElementById('nextPageBtn').addEventListener('click', () => {
+        currentPage++;
+        loadMembers(currentPage);
+    });
+
+    document.addEventListener('DOMContentLoaded', () => loadMembers(currentPage));
 
     // Edit member
     function editMember(id) {
