@@ -4,159 +4,298 @@ info:
   description: API documentation for the Church Management system.
   version: 1.0.0
 servers:
-    - url: http://localhost/api
-      description: Local server
+  - url: http://localhost/api
+    description: Local server
 
 paths:
-    /update.php:
-      post:
-        summary: Update a member
-        requestBody:
-          required: true
+  /create_member.php:
+    post:
+      summary: Create a new member
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                first_name:
+                  type: string
+                last_name:
+                  type: string
+                email:
+                  type: string
+                phone:
+                  type: string
+                address:
+                  type: string
+                status:
+                  type: string
+                church_id:
+                  type: integer
+                cgroup_id:
+                  type: integer
+                next_of_kin:
+                  type: string
+                number_of_kids:
+                  type: integer
+      responses:
+        '201':
+          description: Member was created
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  id:
-                    type: integer
-                  first_name:
+                  message:
                     type: string
-                  last_name:
+                  member:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      first_name:
+                        type: string
+                      last_name:
+                        type: string
+                      email:
+                        type: string
+                      phone:
+                        type: string
+                      address:
+                        type: string
+                      status:
+                        type: string
+                      church_id:
+                        type: integer
+                      cgroup_id:
+                        type: integer
+                      next_of_kin:
+                        type: string
+                      member_number:
+                        type: string
+                      number_of_kids:
+                        type: integer
+        '400':
+          description: Data is incomplete
+        '503':
+          description: Unable to create member
+
+  /update.php:
+    patch:
+      summary: Update a member
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                first_name:
+                  type: string
+                last_name:
+                  type: string
+                email:
+                  type: string
+                phone:
+                  type: string
+                address:
+                  type: string
+                status:
+                  type: string
+                church_id:
+                  type: integer
+                cgroup_id:
+                  type: integer
+                next_of_kin:
+                  type: string
+                number_of_kids:
+                  type: integer
+      responses:
+        '200':
+          description: Member was updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
                     type: string
-                  email:
-                    type: string
-                  phone:
-                    type: string
-                  address:
-                    type: string
-                  status:
-                    type: string
-                  church_id:
-                    type: integer
-                  cgroup_id:
-                    type: integer
-                  next_of_kin:
-                    type: string
-                  number_of_kids:
-                    type: integer
-        responses:
-          '200':
-            description: Member was updated
-            content:
-              application/json:
-                schema:
+                  member:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      first_name:
+                        type: string
+                      last_name:
+                        type: string
+                      email:
+                        type: string
+                      phone:
+                        type: string
+                      address:
+                        type: string
+                      status:
+                        type: string
+                      church_id:
+                        type: integer
+                      cgroup_id:
+                        type: integer
+                      next_of_kin:
+                        type: string
+                      member_number:
+                        type: string
+                      number_of_kids:
+                        type: integer
+        '400':
+          description: Data is incomplete
+        '503':
+          description: Unable to update member
+
+  /delete.php:
+    delete:
+      summary: Delete a member
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+      responses:
+        '200':
+          description: Member was deleted
+        '400':
+          description: No ID provided
+        '503':
+          description: Unable to delete member
+
+  /register.php:
+    post:
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+                firstname:
+                  type: string
+                lastname:
+                  type: string
+                role:
+                  type: string
+      responses:
+        '201':
+          description: User was created
+        '400':
+          description: Data is incomplete
+        '503':
+          description: Unable to create user
+
+  /login.php:
+    post:
+      summary: User login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Login successful
+        '400':
+          description: Data is incomplete
+        '401':
+          description: Invalid email or password
+
+  /logout.php:
+    post:
+      summary: User logout
+      responses:
+        '200':
+          description: Logout successful
+
+  /update_user_role.php:
+    patch:
+      summary: Update user role
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                role:
+                  type: string
+      responses:
+        '200':
+          description: User role was updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+        '400':
+          description: Data is incomplete
+        '503':
+          description: Unable to update user role
+
+  /read_churches.php:
+    get:
+      summary: Get list of churches
+      responses:
+        '200':
+          description: List of churches
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
                   type: object
                   properties:
-                    message:
+                    id:
+                      type: integer
+                    name:
                       type: string
-                    member:
-                      type: object
-                      properties:
-                        id:
-                          type: integer
-                        first_name:
-                          type: string
-                        last_name:
-                          type: string
-                        email:
-                          type: string
-                        phone:
-                          type: string
-                        address:
-                          type: string
-                        status:
-                          type: string
-                        church_id:
-                          type: integer
-                        cgroup_id:
-                          type: integer
-                        next_of_kin:
-                          type: string
-                        member_number:
-                          type: string
-                        number_of_kids:
-                          type: integer
-          '400':
-            description: Data is incomplete
-          '503':
-            description: Unable to update member
+                    address:
+                      type: string
 
-    /register.php:
-      post:
-        summary: Register a new user
-        requestBody:
-          required: true
+  /read_groups.php:
+    get:
+      summary: Get list of groups
+      responses:
+        '200':
+          description: List of groups
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  email:
-                    type: string
-                  password:
-                    type: string
-                  firstname:
-                    type: string
-                  lastname:
-                    type: string
-                  role:
-                    type: string
-        responses:
-          '201':
-            description: User was created
-          '400':
-            description: Data is incomplete
-          '503':
-            description: Unable to create user
-
-    /login.php:
-      post:
-        summary: User login
-        requestBody:
-          required: true
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  email:
-                    type: string
-                  password:
-                    type: string
-        responses:
-          '200':
-            description: Login successful
-          '400':
-            description: Data is incomplete
-          '401':
-            description: Invalid email or password
-
-    /update_user_role.php:
-      post:
-        summary: Update user role
-        requestBody:
-          required: true
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                  role:
-                    type: string
-        responses:
-          '200':
-            description: User role was updated
-            content:
-              application/json:
-                schema:
+                type: array
+                items:
                   type: object
                   properties:
-                    success:
-                      type: boolean
-          '400':
-            description: Data is incomplete
-          '503':
-            description: Unable to update user role
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    description:
+                      type: string
